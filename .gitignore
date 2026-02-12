@@ -11,9 +11,6 @@ extract
 *.test
 *.out
 
-# Go modules
-go.sum
-
 # Database files
 *.db
 *.db-*
