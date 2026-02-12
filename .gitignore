@@ -1,0 +1,49 @@
+# Binaries
+rotate
+extract
+
+# Go build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go modules
+go.sum
+
+# Database files
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.backup
+*.bak
+*_backup_*
+*.rotation_*
+
+# Config files with secrets
+grafana.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
