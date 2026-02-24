@@ -381,7 +381,7 @@ func runUpdate() {
 		os.Exit(1)
 	}
 	newSecretKey := hex.EncodeToString(newSecretKeyBytes)
-	fmt.Printf("New secret_key: %s...\n", newSecretKey[:16])
+	fmt.Printf("New secret_key: %s\n", newSecretKey)
 
 	// 3. Backup database
 	timestamp := time.Now().Format("2006-01-02-1504")
