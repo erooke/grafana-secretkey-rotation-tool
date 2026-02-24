@@ -20,6 +20,16 @@ go mod tidy
 go build -o rotate rotate.go
 ```
 
+## Nix
+
+There is a nix flake, you should be able to do:
+
+```bash
+nix shell github:erooke/grafana-secretkey-rotation-tool
+```
+
+to get this all setup.
+
 ## Procedure
 
 1. **Stop Grafana**
