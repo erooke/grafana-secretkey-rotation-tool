@@ -138,16 +138,6 @@ func readSecretKey(iniPath string) (string, error) {
 	return strings.TrimSpace(string(matches[1])), nil
 }
 
-func updateSecretKey(iniPath, newKey string) error {
-	content, err := os.ReadFile(iniPath)
-	if err != nil {
-		return err
-	}
-	re := regexp.MustCompile(`(?m)^(secret_key\s*=\s*).*$`)
-	newContent := re.ReplaceAll(content, []byte("${1}"+newKey))
-	return os.WriteFile(iniPath, newContent, 0644)
-}
-
 // isPrintable checks if decrypted text looks valid (no control chars except newline/tab).
 func isPrintable(s string) bool {
 	for _, r := range s {
@@ -537,13 +527,6 @@ func runUpdate() {
 	// 7. Re-encrypt legacy secureSettings inside alert_configuration_history
 	fmt.Println("\n--- Re-encrypting alert_configuration_history ---")
 	reencryptAlertConfigTable(db, "alert_configuration_history", oldSecretKey, newSecretKey)
-
-	// 8. Update grafana.ini
-	if err := updateSecretKey(*iniPath, newSecretKey); err != nil {
-		fmt.Fprintf(os.Stderr, "Error updating ini: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println("\ngrafana.ini updated with new secret_key.")
 
 	fmt.Println()
 	fmt.Println("=== ROTATION COMPLETE ===")
