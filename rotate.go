@@ -135,7 +135,19 @@ func readSecretKey(iniPath string) (string, error) {
 	if matches == nil {
 		return "", fmt.Errorf("secret_key not found in %s", iniPath)
 	}
-	return strings.TrimSpace(string(matches[1])), nil
+	value := strings.TrimSpace(string(matches[1]))
+	// Handle $__file{path} syntax (Grafana file provider)
+	fileRe := regexp.MustCompile(`^\$__file\{(.+)\}$`)
+	fileMatch := fileRe.FindStringSubmatch(value)
+	if fileMatch != nil {
+		filePath := fileMatch[1]
+		data, err := os.ReadFile(filePath)
+		if err != nil {
+			return "", fmt.Errorf("reading file provider path %s: %w", filePath, err)
+		}
+		return strings.TrimSpace(string(data)), nil
+	}
+	return value, nil
 }
 
 // isPrintable checks if decrypted text looks valid (no control chars except newline/tab).
@@ -372,7 +384,7 @@ func runUpdate() {
 		fmt.Fprintf(os.Stderr, "Error reading secret_key: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Printf("Old secret_key: %s...\n", oldSecretKey[:16])
+	fmt.Printf("Old secret_key: %s...\n", oldSecretKey[:min(16, len(oldSecretKey))])
 
 	// 2. Generate new secret_key
 	newSecretKeyBytes := make([]byte, 32)
