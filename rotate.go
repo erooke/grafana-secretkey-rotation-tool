@@ -384,7 +384,7 @@ func runUpdate() {
 		fmt.Fprintf(os.Stderr, "Error reading secret_key: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Printf("Old secret_key: %s...\n", oldSecretKey[:16])
+	fmt.Printf("Old secret_key: %s...\n", oldSecretKey[:min(16, len(oldSecretKey))])
 
 	// 2. Generate new secret_key
 	newSecretKeyBytes := make([]byte, 32)
